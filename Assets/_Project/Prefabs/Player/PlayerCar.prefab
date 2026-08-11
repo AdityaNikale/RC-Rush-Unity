@@ -266,7 +266,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!65 &626576423619377722
@@ -326,9 +326,8 @@ MonoBehaviour:
   maxBrakeTorque: 1500
   maxSteerAngle: 32
   topSpeed: 30
+  reverseTopSpeed: 12
   centerOfMassOffset: {x: 0, y: 0, z: 0}
-  downforce: 20
-  antiRollForce: 500
 --- !u!1 &1948466277283632273
 GameObject:
   m_ObjectHideFlags: 0

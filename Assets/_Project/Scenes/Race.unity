@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -209,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1.94, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -259,6 +260,33 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2681c22c614d4554a9cb2f5d90be24d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1046794068}
+  distance: 6.26
+  height: 1.97
+  lookAheadHeight: 0.75
+  positionSmoothTime: 0.08
+  rotationSmoothSpeed: 8
+  useSpeedFov: 1
+  baseFov: 60
+  maxFov: 72
+  maxSpeedForFov: 25
+  avoidWalls: 1
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  collisionRadius: 0.3
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,10 +529,16 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 10, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1046794068 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2246118721596463074, guid: 2a3929748778f6046bc119f6267345f4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1994571183}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1994571183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -526,7 +560,7 @@ PrefabInstance:
     - target: {fileID: 2246118721596463074, guid: 2a3929748778f6046bc119f6267345f4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2246118721596463074, guid: 2a3929748778f6046bc119f6267345f4,
         type: 3}
@@ -566,6 +600,11 @@ PrefabInstance:
     - target: {fileID: 2246118721596463074, guid: 2a3929748778f6046bc119f6267345f4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6831250440738743885, guid: 2a3929748778f6046bc119f6267345f4,
+        type: 3}
+      propertyPath: centerOfMassOffset.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
