@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 6381775249796215216}
   - component: {fileID: 626576423619377722}
   - component: {fileID: 6831250440738743885}
+  - component: {fileID: 3087419238946700850}
   m_Layer: 0
   m_Name: PlayerCar
   m_TagString: Untagged
@@ -216,7 +217,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 86366896719449241}
@@ -268,7 +269,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &626576423619377722
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -328,6 +329,22 @@ MonoBehaviour:
   topSpeed: 30
   reverseTopSpeed: 12
   centerOfMassOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &3087419238946700850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782820644225539146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936cd3a16e076147a394e5c6458494c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentCheckpointIndex: 0
+  CurrentLap: 1
+  TotalCheckpointsPassed: 0
+  LastCheckpointTime: -Infinity
 --- !u!1 &1948466277283632273
 GameObject:
   m_ObjectHideFlags: 0

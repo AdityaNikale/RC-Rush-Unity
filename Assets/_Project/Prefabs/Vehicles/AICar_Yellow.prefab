@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 5092451046962919023}
   - component: {fileID: 2295048971038775862}
   - component: {fileID: 164142141082685761}
+  - component: {fileID: 5219048894769797340}
   m_Layer: 0
   m_Name: AICar_Yellow
   m_TagString: Untagged
@@ -364,7 +365,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &164142141082685761
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -386,6 +387,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.77, y: 0.84, z: 2.2}
   m_Center: {x: 0, y: 0.13, z: 0}
+--- !u!114 &5219048894769797340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4844421364704629205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a7bbf418369744f95ac6f53c2f6d0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointPath: {fileID: 0}
+  topSpeed: 30
+  acceleration: 25
+  turnSpeed: 120
+  speedPersonality: 0.32
+  stuckSpeedThreshold: 1
+  stuckTimeLimit: 1.5
 --- !u!1 &6356143070548429329
 GameObject:
   m_ObjectHideFlags: 0

@@ -515,6 +515,7 @@ GameObject:
   - component: {fileID: 3700382049092330034}
   - component: {fileID: 3565870786866428962}
   - component: {fileID: 2164351987438834603}
+  - component: {fileID: 5918368557489388928}
   m_Layer: 0
   m_Name: AICar_Purple
   m_TagString: Untagged
@@ -565,7 +566,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &2164351987438834603
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -587,3 +588,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.77, y: 0.84, z: 2.2}
   m_Center: {x: 0, y: 0.13, z: 0}
+--- !u!114 &5918368557489388928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804919402222737435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a7bbf418369744f95ac6f53c2f6d0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointPath: {fileID: 0}
+  topSpeed: 30
+  acceleration: 25
+  turnSpeed: 120
+  speedPersonality: 0.25
+  stuckSpeedThreshold: 1
+  stuckTimeLimit: 1.5
