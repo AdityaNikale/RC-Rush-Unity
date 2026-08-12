@@ -49,6 +49,13 @@ namespace RCRush.Player
 
         private void FixedUpdate()
         {
+            // Block movement if race is not active
+            if (RCRush.Core.RaceManager.Instance != null && 
+             RCRush.Core.RaceManager.Instance.CurrentState != RCRush.Core.RaceState.Racing)
+            {
+                return;
+            }      
+                
             float accel = inputController.AccelerateInput;
             float brake = inputController.BrakeReverseInput;
             float steer = inputController.SteerInput;

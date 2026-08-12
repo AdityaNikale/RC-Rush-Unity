@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using RCRush.Core;
 using RCRush.Racing;
 
 namespace RCRush.UI
@@ -17,6 +18,8 @@ namespace RCRush.UI
 
         [Header("UI Elements")]
         [SerializeField] private TextMeshProUGUI lapText;
+        [SerializeField] private TextMeshProUGUI countdownText;
+        [SerializeField] private TextMeshProUGUI timerText;
 
         private int TotalLaps => checkpointManager != null ? checkpointManager.TotalLaps : 1;
 
@@ -25,14 +28,20 @@ namespace RCRush.UI
             ResolveReferences();
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            ResolveReferences();
-
             if (playerTracker != null)
             {
                 playerTracker.OnLapCompleted -= OnLapCompleted;
                 playerTracker.OnLapCompleted += OnLapCompleted;
+            }
+
+            if (RaceManager.Instance != null)
+            {
+                RaceManager.Instance.OnCountdownUpdated -= UpdateCountdownDisplay;
+                RaceManager.Instance.OnCountdownUpdated += UpdateCountdownDisplay;
+                RaceManager.Instance.OnTimerUpdated -= UpdateTimerDisplay;
+                RaceManager.Instance.OnTimerUpdated += UpdateTimerDisplay;
             }
 
             UpdateLapDisplay(playerTracker != null ? Mathf.Max(0, playerTracker.CurrentLap - 1) : 0);
@@ -43,6 +52,12 @@ namespace RCRush.UI
             if (playerTracker != null)
             {
                 playerTracker.OnLapCompleted -= OnLapCompleted;
+            }
+
+            if (RaceManager.Instance != null)
+            {
+                RaceManager.Instance.OnCountdownUpdated -= UpdateCountdownDisplay;
+                RaceManager.Instance.OnTimerUpdated -= UpdateTimerDisplay;
             }
         }
 
@@ -80,18 +95,36 @@ namespace RCRush.UI
 
             int displayLap = Mathf.Clamp(currentLap, 0, TotalLaps);
 
-            if (displayLap < TotalLaps)
-            {
-                lapText.text = $"LAP {displayLap} / {TotalLaps}";
-            }
-            else if (displayLap == TotalLaps)
-            {
-                lapText.text = $"LAP {displayLap} / {TotalLaps}";
-            }
-            else
+            if (displayLap >= TotalLaps)
             {
                 lapText.text = "FINISH!";
             }
+            else
+            {
+                lapText.text = $"LAP {displayLap} / {TotalLaps}";
+            }
+        }
+
+        private void UpdateCountdownDisplay(string text)
+        {
+            if (countdownText != null)
+            {
+                countdownText.text = text;
+            }
+        }
+
+        private void UpdateTimerDisplay(float timeSeconds)
+        {
+            if (timerText == null)
+            {
+                return;
+            }
+
+            int minutes = Mathf.FloorToInt(timeSeconds / 60f);
+            int seconds = Mathf.FloorToInt(timeSeconds % 60f);
+            int milliseconds = Mathf.FloorToInt((timeSeconds * 100f) % 100f);
+
+            timerText.text = string.Format("{0:00}:{1:00}.{2:00}", minutes, seconds, milliseconds);
         }
     }
 }
