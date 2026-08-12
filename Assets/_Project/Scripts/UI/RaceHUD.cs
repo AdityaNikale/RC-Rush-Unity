@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using RCRush.Core;
 using RCRush.Racing;
+using RCRush.PowerUps;
 
 namespace RCRush.UI
 {
@@ -21,6 +22,9 @@ namespace RCRush.UI
         [SerializeField] private TextMeshProUGUI positionText;
         [SerializeField] private TextMeshProUGUI countdownText;
         [SerializeField] private TextMeshProUGUI timerText;
+        [SerializeField] private TextMeshProUGUI powerUpText;
+        
+        private PowerUpInventory playerPowerUpInventory;
 
         private int TotalLaps => checkpointManager != null ? checkpointManager.TotalLaps : 1;
 
@@ -33,6 +37,7 @@ namespace RCRush.UI
         {
             if (playerTracker != null)
             {
+                playerPowerUpInventory = playerTracker.GetComponent<PowerUpInventory>();
                 playerTracker.OnLapCompleted -= OnLapCompleted;
                 playerTracker.OnLapCompleted += OnLapCompleted;
             }
@@ -64,6 +69,11 @@ namespace RCRush.UI
 
         private void Update()
         {
+            if (powerUpText != null && playerPowerUpInventory != null)
+            {
+                PowerUpType current = playerPowerUpInventory.CurrentPowerUp;
+                powerUpText.text = current == PowerUpType.None ? "POWER-UP: NONE" : $"POWER-UP: {current.ToString().ToUpper()} [E]";
+            }
             UpdatePositionDisplay();
         }
 

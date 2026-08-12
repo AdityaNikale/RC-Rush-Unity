@@ -35,6 +35,7 @@ namespace RCRush.Player
 
         private Rigidbody rb;
         private PlayerInputController inputController;
+        private RCRush.Racing.CarCheckpointTracker checkpointTracker;
 
         public float CurrentSpeedKmh => rb != null ? rb.velocity.magnitude * 3.6f : 0f;
 
@@ -42,6 +43,7 @@ namespace RCRush.Player
         {
             rb = GetComponent<Rigidbody>();
             inputController = GetComponent<PlayerInputController>();
+            checkpointTracker = GetComponent<RCRush.Racing.CarCheckpointTracker>();
 
             rb.centerOfMass = centerOfMassOffset;
             rb.constraints &= ~(RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ);
@@ -49,25 +51,33 @@ namespace RCRush.Player
 
         private void FixedUpdate()
         {
-            // Block movement if race is not active
-            if (RCRush.Core.RaceManager.Instance != null && 
-             RCRush.Core.RaceManager.Instance.CurrentState != RCRush.Core.RaceState.Racing)
-            {
-                return;
-            }      
-                
-            float accel = inputController.AccelerateInput;
-            float brake = inputController.BrakeReverseInput;
-            float steer = inputController.SteerInput;
+            // Check race and finish state
+            bool isRaceActive = RCRush.Core.RaceManager.Instance == null || 
+                                RCRush.Core.RaceManager.Instance.CurrentState == RCRush.Core.RaceState.Racing;
+            bool hasFinished = (checkpointTracker != null && checkpointTracker.HasFinished) ||
+                               (RCRush.Core.RaceManager.Instance != null && RCRush.Core.RaceManager.Instance.IsPlayerFinished);
 
+            float accel = 0f;
+            float brake = 0f;
+            float steer = 0f;
+
+            // Only allow driving inputs when race is active and vehicle has not finished
+            if (isRaceActive && !hasFinished)
+            {
+                accel = inputController.AccelerateInput;
+                brake = inputController.BrakeReverseInput;
+                steer = inputController.SteerInput;
+
+                if (inputController.ResetVehiclePressed)
+                {
+                    RecoverVehicle();
+                }
+            }
+
+            // Natural physics deceleration: zero motor torque with engine braking
             HandleMotorAndBrakes(accel, brake);
             HandleSteering(steer);
             UpdateWheelVisuals();
-
-            if (inputController.ResetVehiclePressed)
-            {
-                RecoverVehicle();
-            }
         }
 
         private void HandleMotorAndBrakes(float accel, float brake)

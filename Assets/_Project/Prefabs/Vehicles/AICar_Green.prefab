@@ -297,6 +297,7 @@ GameObject:
   - component: {fileID: 4625932283841906939}
   - component: {fileID: 6715251967965689034}
   - component: {fileID: 3548338828041921369}
+  - component: {fileID: 242940253488281701}
   m_Layer: 0
   m_Name: AICar_Green
   m_TagString: Untagged
@@ -385,7 +386,8 @@ MonoBehaviour:
   topSpeed: 30
   acceleration: 25
   turnSpeed: 120
-  speedPersonality: 0.32
+  speedPersonality: 0.39
+  naturalBrakingRate: 2.5
   stuckSpeedThreshold: 1
   stuckTimeLimit: 1.5
 --- !u!114 &3548338828041921369
@@ -400,10 +402,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c936cd3a16e076147a394e5c6458494c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   CurrentCheckpointIndex: 0
   CurrentLap: 1
   TotalCheckpointsPassed: 0
+  hasFinished: 0
+  finishPosition: -1
+  finishTime: 0
   LastCheckpointTime: -Infinity
+--- !u!114 &242940253488281701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3484013479477896676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec18eddaf751e4182ca68561b8354d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPowerUp: 0
+  boostForce: 3500
+  boostDuration: 3
+  empRadius: 35
+  empDuration: 3
+  empSlowdownFactor: 0.3
 --- !u!1 &5561953121338582617
 GameObject:
   m_ObjectHideFlags: 0
