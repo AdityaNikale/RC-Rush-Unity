@@ -5,7 +5,7 @@ namespace RCRush.Racing
 {
     /// <summary>
     /// Manages track checkpoints, validates the required sequence,
-    /// tracks laps, detects wrong direction, and finishes the race.
+    /// tracks laps, detects wrong direction, and registers finished vehicles.
     /// </summary>
     public class CheckpointManager : MonoBehaviour
     {
@@ -17,8 +17,7 @@ namespace RCRush.Racing
 
         public int TotalCheckpoints => checkpoints.Count;
         public int TotalLaps => totalLaps;
-
-        private bool raceFinished = false;
+        public bool IsRaceFinished => RacePositionManager.Instance != null && (RacePositionManager.Instance.IsStandingsLocked || RacePositionManager.Instance.AreAllCarsFinished);
 
         private void Awake()
         {
@@ -44,8 +43,8 @@ namespace RCRush.Racing
             CarCheckpointTracker carTracker,
             int checkpointIndex)
         {
-            // Do nothing after the race has finished.
-            if (raceFinished)
+            // Do not process checkpoints for cars that have already finished
+            if (carTracker == null || carTracker.HasFinished)
                 return;
 
             if (checkpoints.Count == 0)
@@ -73,7 +72,7 @@ namespace RCRush.Racing
 
             if (checkpointIndex != nextExpectedIndex)
             {
-                // The player entered a checkpoint that is not the
+                // The car entered a checkpoint that is not the
                 // checkpoint expected next.
                 Debug.Log(
                     $"[CheckpointManager] {carTracker.name} " +
@@ -143,15 +142,22 @@ namespace RCRush.Racing
             );
 
             // ---------------------------------------------------------
-            // THREE LAPS = RACE FINISHED
+            // REQUIRED LAPS COMPLETED = CAR FINISHED
             // ---------------------------------------------------------
 
             if (carTracker.CurrentLap >= totalLaps)
             {
-                raceFinished = true;
+                if (RacePositionManager.Instance != null)
+                {
+                    RacePositionManager.Instance.RegisterCarFinished(carTracker);
+                }
+                else
+                {
+                    carTracker.SetFinished(1);
+                }
 
                 Debug.Log(
-                    $"[CheckpointManager] {carTracker.name} WINS!"
+                    $"[CheckpointManager] {carTracker.name} FINISHED in position {carTracker.FinishPosition}!"
                 );
 
                 return;

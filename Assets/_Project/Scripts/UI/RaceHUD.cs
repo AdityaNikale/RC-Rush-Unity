@@ -18,6 +18,7 @@ namespace RCRush.UI
 
         [Header("UI Elements")]
         [SerializeField] private TextMeshProUGUI lapText;
+        [SerializeField] private TextMeshProUGUI positionText;
         [SerializeField] private TextMeshProUGUI countdownText;
         [SerializeField] private TextMeshProUGUI timerText;
 
@@ -61,11 +62,37 @@ namespace RCRush.UI
             }
         }
 
+        private void Update()
+        {
+            UpdatePositionDisplay();
+        }
+
         private void ResolveReferences()
         {
             if (playerTracker == null)
             {
-                playerTracker = FindObjectOfType<CarCheckpointTracker>();
+                var playerVehicle = FindObjectOfType<RCRush.Player.RCVehicleController>();
+                if (playerVehicle != null)
+                {
+                    playerTracker = playerVehicle.GetComponent<CarCheckpointTracker>();
+                }
+            }
+
+            if (playerTracker == null)
+            {
+                var allTrackers = FindObjectsOfType<CarCheckpointTracker>();
+                foreach (var tracker in allTrackers)
+                {
+                    if (tracker.IsPlayer)
+                    {
+                        playerTracker = tracker;
+                        break;
+                    }
+                }
+                if (playerTracker == null && allTrackers.Length > 0)
+                {
+                    playerTracker = allTrackers[0];
+                }
             }
 
             if (checkpointManager == null)
@@ -87,6 +114,16 @@ namespace RCRush.UI
         private void OnLapCompleted(int newLap)
         {
             UpdateLapDisplay(newLap);
+        }
+
+        private void UpdatePositionDisplay()
+        {
+            if (positionText == null || playerTracker == null || RacePositionManager.Instance == null) return;
+
+            int pos = RacePositionManager.Instance.GetCarPosition(playerTracker);
+            int total = RacePositionManager.Instance.TotalCars;
+
+            positionText.text = $"POS {pos} / {total}";
         }
 
         public void UpdateLapDisplay(int currentLap)

@@ -516,6 +516,7 @@ GameObject:
   - component: {fileID: 3565870786866428962}
   - component: {fileID: 2164351987438834603}
   - component: {fileID: 5918368557489388928}
+  - component: {fileID: 5873697801482307519}
   m_Layer: 0
   m_Name: AICar_Purple
   m_TagString: Untagged
@@ -607,3 +608,19 @@ MonoBehaviour:
   speedPersonality: 0.25
   stuckSpeedThreshold: 1
   stuckTimeLimit: 1.5
+--- !u!114 &5873697801482307519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804919402222737435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936cd3a16e076147a394e5c6458494c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentCheckpointIndex: 0
+  CurrentLap: 1
+  TotalCheckpointsPassed: 0
+  LastCheckpointTime: -Infinity

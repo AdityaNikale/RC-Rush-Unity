@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 2295048971038775862}
   - component: {fileID: 164142141082685761}
   - component: {fileID: 5219048894769797340}
+  - component: {fileID: 6280496816727670889}
   m_Layer: 0
   m_Name: AICar_Yellow
   m_TagString: Untagged
@@ -403,9 +404,25 @@ MonoBehaviour:
   topSpeed: 30
   acceleration: 25
   turnSpeed: 120
-  speedPersonality: 0.32
+  speedPersonality: 0.3
   stuckSpeedThreshold: 1
   stuckTimeLimit: 1.5
+--- !u!114 &6280496816727670889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4844421364704629205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936cd3a16e076147a394e5c6458494c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentCheckpointIndex: 0
+  CurrentLap: 1
+  TotalCheckpointsPassed: 0
+  LastCheckpointTime: -Infinity
 --- !u!1 &6356143070548429329
 GameObject:
   m_ObjectHideFlags: 0

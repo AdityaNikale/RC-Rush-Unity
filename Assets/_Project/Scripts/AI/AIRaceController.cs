@@ -1,5 +1,6 @@
 using UnityEngine;
 using RCRush.Core;
+using RCRush.Racing;
 
 namespace RCRush.AI
 {
@@ -22,6 +23,10 @@ namespace RCRush.AI
         [Tooltip("Speed multiplier (e.g. 1.0 = Fast, 0.85 = Medium, 0.75 = Slow)")]
         [SerializeField] private float speedPersonality = 1f;
 
+        [Header("Finish / Braking Behavior")]
+        [Tooltip("Rate at which the vehicle decelerates to a stop when racing finishes")]
+        [SerializeField] private float naturalBrakingRate = 2.5f;
+
         [Header("Stuck & Recovery System")]
         [SerializeField] private float stuckSpeedThreshold = 1f;
         [SerializeField] private float stuckTimeLimit = 1.5f;
@@ -29,13 +34,18 @@ namespace RCRush.AI
         // Internal Navigation Variables
         private int currentWaypointIndex = 0;
         private Rigidbody rb;
+        private CarCheckpointTracker checkpointTracker;
         private float stuckTimer = 0f;
         private bool isReversing = false;
         private float reverseTimer = 0f;
+        private bool isDrivingStopped = false;
+
+        public bool IsDrivingStopped => isDrivingStopped;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            checkpointTracker = GetComponent<CarCheckpointTracker>();
         }
 
         private void Start()
@@ -51,6 +61,26 @@ namespace RCRush.AI
             // Block AI driving if race is not active
             if (RaceManager.Instance != null && RaceManager.Instance.CurrentState != RaceState.Racing)
             {
+                return;
+            }
+
+            // Check if driving should stop (individual finish, player finish, or explicit stop command)
+            bool shouldStop = isDrivingStopped ||
+                              (checkpointTracker != null && checkpointTracker.HasFinished) ||
+                              (RacePositionManager.Instance != null && RacePositionManager.Instance.IsStandingsLocked);
+
+            if (shouldStop)
+            {
+                isDrivingStopped = true;
+                isReversing = false;
+                stuckTimer = 0f;
+
+                // Natural physics deceleration: preserve momentum and let the vehicle roll/slide to a stop
+                if (rb != null && rb.velocity.sqrMagnitude > 0.001f)
+                {
+                    rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, naturalBrakingRate * Time.fixedDeltaTime);
+                    rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, naturalBrakingRate * Time.fixedDeltaTime);
+                }
                 return;
             }
 
@@ -135,6 +165,33 @@ namespace RCRush.AI
                 isReversing = false;
                 // Re-align rotation directly facing target waypoint
                 transform.rotation = Quaternion.LookRotation(toTarget.normalized);
+            }
+        }
+
+        /// <summary>
+        /// Commands the AI to stop driving inputs and decelerate naturally using physics momentum.
+        /// </summary>
+        public void StopDriving()
+        {
+            isDrivingStopped = true;
+            isReversing = false;
+            stuckTimer = 0f;
+        }
+
+        /// <summary>
+        /// Resets internal AI state for a new race or race restart.
+        /// </summary>
+        public void ResetAI()
+        {
+            isDrivingStopped = false;
+            currentWaypointIndex = 0;
+            stuckTimer = 0f;
+            isReversing = false;
+            reverseTimer = 0f;
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
         }
     }
