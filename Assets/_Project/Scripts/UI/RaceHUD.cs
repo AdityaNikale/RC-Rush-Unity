@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using RCRush.Core;
 using RCRush.Racing;
@@ -22,7 +23,12 @@ namespace RCRush.UI
         [SerializeField] private TextMeshProUGUI positionText;
         [SerializeField] private TextMeshProUGUI countdownText;
         [SerializeField] private TextMeshProUGUI timerText;
-        [SerializeField] private TextMeshProUGUI powerUpText;
+
+        [Header("Power-Up Circle UI")]
+        [SerializeField] private Image powerUpCircleBackground;
+        [SerializeField] private Image powerUpIconImage;
+        [SerializeField] private Sprite speedBoostSprite;
+        [SerializeField] private Sprite empSprite;
         
         private PowerUpInventory playerPowerUpInventory;
 
@@ -69,12 +75,8 @@ namespace RCRush.UI
 
         private void Update()
         {
-            if (powerUpText != null && playerPowerUpInventory != null)
-            {
-                PowerUpType current = playerPowerUpInventory.CurrentPowerUp;
-                powerUpText.text = current == PowerUpType.None ? "POWER-UP: NONE" : $"POWER-UP: {current.ToString().ToUpper()} [E]";
-            }
             UpdatePositionDisplay();
+            UpdatePowerUpIconDisplay();
         }
 
         private void ResolveReferences()
@@ -134,6 +136,42 @@ namespace RCRush.UI
             int total = RacePositionManager.Instance.TotalCars;
 
             positionText.text = $"POS {pos} / {total}";
+        }
+
+        private void UpdatePowerUpIconDisplay()
+        {
+            if (playerPowerUpInventory == null) return;
+
+            PowerUpType current = playerPowerUpInventory.CurrentPowerUp;
+
+            if (current == PowerUpType.None)
+            {
+                if (powerUpIconImage != null) powerUpIconImage.enabled = false;
+                if (powerUpCircleBackground != null) powerUpCircleBackground.color = new Color(0.2f, 0.2f, 0.2f, 0.4f); // Dim grey circle
+            }
+            else
+            {
+                if (powerUpIconImage != null)
+                {
+                    powerUpIconImage.enabled = true;
+
+                    if (current == PowerUpType.SpeedBoost)
+                    {
+                        if (speedBoostSprite != null) powerUpIconImage.sprite = speedBoostSprite;
+                        powerUpIconImage.color = Color.yellow; // Fallback color if no sprite asset
+                    }
+                    else if (current == PowerUpType.EMP)
+                    {
+                        if (empSprite != null) powerUpIconImage.sprite = empSprite;
+                        powerUpIconImage.color = Color.cyan; // Fallback color if no sprite asset
+                    }
+                }
+
+                if (powerUpCircleBackground != null)
+                {
+                    powerUpCircleBackground.color = new Color(1f, 1f, 1f, 0.9f); // Active bright circle
+                }
+            }
         }
 
         public void UpdateLapDisplay(int currentLap)
