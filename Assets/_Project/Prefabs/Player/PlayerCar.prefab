@@ -200,6 +200,8 @@ GameObject:
   - component: {fileID: 626576423619377722}
   - component: {fileID: 6831250440738743885}
   - component: {fileID: 3087419238946700850}
+  - component: {fileID: 5832365012258281019}
+  - component: {fileID: 5728920473202062826}
   m_Layer: 0
   m_Name: PlayerCar
   m_TagString: Untagged
@@ -341,10 +343,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c936cd3a16e076147a394e5c6458494c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   CurrentCheckpointIndex: 0
   CurrentLap: 1
   TotalCheckpointsPassed: 0
+  hasFinished: 0
+  finishPosition: -1
+  finishTime: 0
   LastCheckpointTime: -Infinity
+--- !u!114 &5832365012258281019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782820644225539146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec18eddaf751e4182ca68561b8354d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPowerUp: 0
+  boostForce: 500
+  boostDuration: 3
+  empRadius: 35
+  empDuration: 3
+  empSlowdownFactor: 0.3
+--- !u!114 &5728920473202062826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782820644225539146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62bea0f5c9feeb5478c620b0d7803db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mobileResetButton: {fileID: 0}
+  flippedAngleThreshold: 75
+  checkDelay: 0.8
 --- !u!1 &1948466277283632273
 GameObject:
   m_ObjectHideFlags: 0

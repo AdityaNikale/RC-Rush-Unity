@@ -15,8 +15,20 @@ namespace RCRush.Racing
         [Header("Race Settings")]
         [SerializeField] private int totalLaps = 3;
 
+        [Header("Wrong Way UI Reference")]
+        [SerializeField] private RCRush.UI.WrongWayUIHandler wrongWayUI;
+
         public int TotalCheckpoints => checkpoints.Count;
         public int TotalLaps => totalLaps;
+
+        public Checkpoint GetCheckpoint(int index)
+        {
+            if (checkpoints != null && index >= 0 && index < checkpoints.Count)
+            {
+                return checkpoints[index];
+            }
+            return null;
+        }
         public bool IsRaceFinished => RacePositionManager.Instance != null && (RacePositionManager.Instance.IsStandingsLocked || RacePositionManager.Instance.AreAllCarsFinished);
 
         private void Awake()
@@ -84,6 +96,12 @@ namespace RCRush.Racing
                 // Notify the UI system later.
                 carTracker.OnWrongDirection?.Invoke();
 
+                // When WRONG direction detected:
+                if (carTracker.IsPlayer && wrongWayUI != null)
+                {
+                    wrongWayUI.SetWrongWayState(true);
+                }
+
                 // IMPORTANT:
                 // Do not change checkpoint progress.
                 // Do not change lap.
@@ -98,6 +116,12 @@ namespace RCRush.Racing
             carTracker.LastCheckpointTime = Time.time;
 
             carTracker.TotalCheckpointsPassed++;
+
+            // When CORRECT direction detected:
+            if (carTracker.IsPlayer && wrongWayUI != null)
+            {
+                wrongWayUI.SetWrongWayState(false);
+            }
 
             // Notify other systems.
             carTracker.OnCheckpointPassed?.Invoke(
