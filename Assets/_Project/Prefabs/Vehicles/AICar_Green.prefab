@@ -386,7 +386,7 @@ MonoBehaviour:
   topSpeed: 30
   acceleration: 25
   turnSpeed: 120
-  speedPersonality: 0.39
+  speedPersonality: 0.34
   naturalBrakingRate: 2.5
   stuckSpeedThreshold: 1
   stuckTimeLimit: 1.5
