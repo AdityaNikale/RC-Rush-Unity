@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using RCRush.UI;
 
 namespace RCRush.Player
 {
@@ -20,6 +21,7 @@ namespace RCRush.Player
         private Rigidbody rb;
         private float flippedTimer = 0f;
         private bool isFlipped = false;
+        private TouchButtonHandler mobileResetTouchHandler;
 
         private void Awake()
         {
@@ -30,6 +32,12 @@ namespace RCRush.Player
         {
             if (mobileResetButton != null)
             {
+                // Ensure there is a TouchButtonHandler to reliably capture touches on mobile
+                mobileResetTouchHandler = mobileResetButton.GetComponent<TouchButtonHandler>();
+                if (mobileResetTouchHandler == null)
+                {
+                    mobileResetTouchHandler = mobileResetButton.AddComponent<TouchButtonHandler>();
+                }
                 mobileResetButton.SetActive(false); // Hidden by default
             }
         }
@@ -38,6 +46,13 @@ namespace RCRush.Player
         {
             // 1. PC Key Input (R key)
             if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                ResetCarUpright();
+                return;
+            }
+
+            // 1.5 Mobile Touch Reset Input (via TouchButtonHandler)
+            if (mobileResetTouchHandler != null && mobileResetTouchHandler.IsPressed)
             {
                 ResetCarUpright();
                 return;
@@ -72,18 +87,29 @@ namespace RCRush.Player
         }
 
         /// <summary>
-        /// Flips the car right-side up, zeroes out physics momentum, and lifts slightly above ground.
-        /// </summary>
         public void ResetCarUpright()
         {
-            // Re-align upright while keeping current forward facing heading
-            transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
-            transform.position += Vector3.up * 0.8f;
-
-            if (rb != null)
+            var vehicleController = GetComponent<RCVehicleController>();
+            if (vehicleController != null)
             {
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
+                vehicleController.RecoverVehicle();
+            }
+            else
+            {
+                // Fallback: update Rigidbody directly and sync transforms
+                if (rb != null)
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+                    rb.position += Vector3.up * 0.8f;
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+                    transform.position += Vector3.up * 0.8f;
+                }
+                Physics.SyncTransforms();
             }
 
             isFlipped = false;

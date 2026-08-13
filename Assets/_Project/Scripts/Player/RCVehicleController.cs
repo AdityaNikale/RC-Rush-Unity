@@ -146,7 +146,7 @@ namespace RCRush.Player
             UpdateSingleWheelVisual(rearRight);
         }
 
-        private void RecoverVehicle()
+        public void RecoverVehicle()
         {
             if (rb == null)
                 return;
@@ -163,8 +163,11 @@ namespace RCRush.Player
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
+            rb.position = targetPosition;
+            rb.rotation = targetRotation;
             transform.position = targetPosition;
             transform.rotation = targetRotation;
+            Physics.SyncTransforms();
         }
 
         private void UpdateSingleWheelVisual(WheelData wheel)
